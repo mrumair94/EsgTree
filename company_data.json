@@ -1,0 +1,17 @@
+[
+  {
+    "companyName": "New Company",
+    "email": "new@example.com",
+    "status": "pending"
+  },
+  {
+    "companyName": "New Company",
+    "email": "new@example.com",
+    "status": "pending"
+  },
+  {
+    "companyName": "New Company",
+    "email": "new@example.com",
+    "status": "pending"
+  }
+]

@@ -1,0 +1,103 @@
+Current User Flow
+Login
+InviteGP Company
+Save Company Data in Data.CSV
+Admin Dashboard Search That company
+Copy Invitation Link
+Logout
+Open Invitation link
+Fill GP Verification
+Update company Status from Pending to Approved in Data.csv
+-----
+Classes Details
+--------
+BaseClass
+Initialize WebDriver
+Singleton WebDriver for Optimization purposes
+Fluent Wait
+Explicit Wait
+--------
+CSVHandler
+--------
+LoginPage
+Login (Use Admin Email)
+Logout
+Assertion on successful Login?
+Assertion of Logout?
+Return AdminDashboardPage?
+-----
+AdminDashboardPage
+Search Pending Company
+Click on the Copy Button
+Assertion on successful copy
+Click on the Add new Contract Button
+Return GPContractInvitationPage?
+---------
+GPContractInvitationPage
+Type Company Name  (Write in CSV)
+Select GP or LP?   (Write in CSV)
+Select Contract Type?
+Type Contract Name
+Type Contact Email  (Write in CSV)
+No Of Portfolio Companies
+No. of Team Members
+Select Enable Funds Manager
+Click Send Invite button
+Check if the There is no error or validation issue?
+Check if the Form has been submitted successfully?
+IF everything is fine then save the data in the CSV file
+Write Company Name, GP/PC?, Email, Pending Status in CSV
+Assertion on Successful Invitation Sent?
+Return AdminDashboardPage?
+---------
+AdminDashboardPage
+Search Company Name
+Copy Link
+Logout
+Return LoginPage?
+----------
+GPVerificationPage
+Open the Registration link
+Select Investor
+HEad Office Location
+Investment Location
+Assets Under Management
+Password
+Confirm Password
+Click on Create Account
+Return LoginPage?
+---------
+GPDashboardPage?
+Login with the newly Verified GPCompany
+Click on the Invite/Add Portfolio Company
+Return PCCompanyInvitationPage
+------------
+PCCompanyInvitationPage?
+Type CompanyName
+Contact Name
+Contact Email
+Investment Amount
+Percentage Ownership
+Select Board Seat Held
+Click Submit Button
+Search PC Company Name
+Click on Copy Verification Button
+Logout
+Return LoginPage
+---------
+VerifyPCCompanyPage?
+Open Copied Link
+Assert Correct Verification link
+Select Sector
+Select Industry
+Number of Employees *
+Number of Customers (previous year) *
+Annual Sales Revenue (previous year) *
+Head Office Location *
+Other Office Location
+Password
+Confirm Password
+Click on the Create Account
+Return LoginPage
+
+
