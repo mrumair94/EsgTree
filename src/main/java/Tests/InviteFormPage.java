@@ -62,7 +62,7 @@ public class InviteFormPage extends TestBase {
         getDriver().findElement(By.xpath("//button[@type='submit'][contains(text(),'Send Invite')]")).click();
 
         Thread.sleep(1000);
-        csvHandler.writeData(getCname(),getEmailId());
+        //csvHandler.writeData(getCname(),getEmailId());
         System.out.println("typed company name: " +getCname());
         System.out.println("Typed Email: "+getEmailId());
 

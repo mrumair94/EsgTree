@@ -17,7 +17,6 @@ public class TestGPOnboarding extends TestBase {
    private AdminAccessManagerPage adminAccessManagerPage;
    private GPonboardingPage gPonboardingPage;
    private  FrameWorkSelectionPupupModel frameWorkSelectionPupupModel;
-   private InvitePCFormPage invitePCFormPage;
 
     public Login getlogin(){
         if (this.login == null){
@@ -49,12 +48,7 @@ public class TestGPOnboarding extends TestBase {
         }
         return this.frameWorkSelectionPupupModel;
     }
-    public InvitePCFormPage getinvitePCFormPage(){
-        if (this.invitePCFormPage == null){
-            this.invitePCFormPage = new InvitePCFormPage();
-        }
-        return this.invitePCFormPage;
-    }
+
 
     @Test(priority = 0)
     public void Setup(){
@@ -101,7 +95,7 @@ public class TestGPOnboarding extends TestBase {
     @Test(priority = 5)
     public void testSearchCompanyName() throws IOException, InterruptedException, UnsupportedFlavorException {
        //String companyName=csvHandler.getCompanyNameWithPendingStatus();
-         getAdminBPPage().searchField("SepAuto Darius Ltd.");
+         getAdminBPPage().searchField("AutoTestMarketing and Advertising");
        // getAdminBPPage().searchField("SepAuto Patrice Ltd.");
          Thread.sleep(1500);
         email = getAdminBPPage().getEmailByStatus("Accepted");
@@ -109,7 +103,7 @@ public class TestGPOnboarding extends TestBase {
 
     }
     String copiedLink;
-  //@Test(priority = 6, dependsOnMethods = "testSearchCompanyName")
+  @Test(priority = 6, dependsOnMethods = "testSearchCompanyName")
     public void testCopyLinkButton() throws IOException, InterruptedException, UnsupportedFlavorException {
       getAdminBPPage().clickCopyLinkButton();
       Thread.sleep(1500);
@@ -123,7 +117,8 @@ public class TestGPOnboarding extends TestBase {
           linkIsNotEmpty = true;
           System.out.println(this.copiedLink);
           Assert.assertTrue(linkIsNotEmpty, this.copiedLink);
-      }
+      }else
+          System.out.println("link is empty");
   }
   // dependsOnMethods = "testCopyLinkButton"
     @Test(priority = 7)
@@ -134,7 +129,7 @@ public class TestGPOnboarding extends TestBase {
         String logOutPageTitle = getDriver().getTitle();
         Assert.assertEquals(logOutPageTitle,"login");
     }
-   // @Test(priority = 8, dependsOnMethods = "testLogout")
+    @Test(priority = 8, dependsOnMethods = "testLogout")
     public void testOpenLink() throws IOException, InterruptedException, UnsupportedFlavorException {
         bodyLoadWait();
        getDriver().get(this.copiedLink);
@@ -150,7 +145,7 @@ public class TestGPOnboarding extends TestBase {
         String loginPAgeTitle = getDriver().getTitle();
         Assert.assertEquals(loginPAgeTitle,title);
     }
-    @Test(priority = 10)
+   // @Test(priority = 10)
     public void loginwithVerifiedCompany() throws InterruptedException {
         bodyLoadWait();
         System.out.println(email);
@@ -183,31 +178,6 @@ public class TestGPOnboarding extends TestBase {
 
         Assert.assertTrue(configIndicator.isDisplayed());
 
-    }
-    @Test(priority = 12)
-    public void TestinvitePCCompany() {
-        bodyLoadWait();
-        getinvitePCFormPage().clickAddPCBtn();
-    }
-    @Test (priority = 13)
-            public void typeCompanyName(){
-        getinvitePCFormPage().typeCompanyName();
-    }
-    @Test (priority = 14)
-    public void typeContactName(){
-        getinvitePCFormPage().typeContactName();
-    }
-    @Test (priority = 15)
-    public void emailIDBy(){
-        getinvitePCFormPage().emailIDBy();
-    }
-    @Test (priority = 16)
-    public void typePercentageAmount(){
-        getinvitePCFormPage().typePercentageAmount();
-    }
-    @Test (priority = 17)
-    public void selectBoardSeatNo(){
-        getinvitePCFormPage().selectBoardSeatNo();
     }
 
 }

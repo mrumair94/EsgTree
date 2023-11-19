@@ -1,6 +1,5 @@
 package Tests;
 
-import Utilities.CSVHandler;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
@@ -26,8 +25,6 @@ public class TestBase {
    //"https://esgtree.com/";
     public static WebDriver driver;
     public JavascriptExecutor js= (JavascriptExecutor) getDriver();
-    String csvFilePath = "src/main/resources/data.csv";
-    public CSVHandler csvHandler = new CSVHandler(csvFilePath);
 
     public static WebDriver getDriver() {
         if (driver == null) {

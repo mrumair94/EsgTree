@@ -77,7 +77,7 @@ public class GPonboardingPage extends TestBase {
 
         Thread.sleep(1000);
         String cname =getIgpForm().getCname();
-        csvHandler.updateStatus(cname, "Approved");
+       // csvHandler.updateStatus(cname, "Approved");
         System.out.println("Updated status for Company: "+cname);
 
         Thread.sleep(1000);
@@ -97,6 +97,6 @@ public class GPonboardingPage extends TestBase {
    // @Test(priority = 8)
     public void loginWithNewCompany(){
         bodyLoadWait();
-        getlogin().loginFunction(csvHandler.getEmailWithApprovedStatus(),"Admin123!");
+      //  getlogin().loginFunction(csvHandler.getEmailWithApprovedStatus(),"Admin123!");
     }
 }

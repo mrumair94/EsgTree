@@ -7,7 +7,7 @@
 <!--    </listeners>-->
     <test name ="Verify Broken Links">
         <classes>
-            <class name = "Tests.VerifyBlogLinks"/>
+            <class name = "Pages.VerifyBlogLinks"/>
         </classes>
     </test>
 </suite>

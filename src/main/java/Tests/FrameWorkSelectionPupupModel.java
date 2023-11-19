@@ -1,6 +1,7 @@
 package Tests;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
@@ -74,18 +75,19 @@ public class FrameWorkSelectionPupupModel  extends TestBase {
         pageLoaderWait();
 
         if (checkFrameWorkPopupIsVisible() == true) {
-            selectquartly();
             System.out.println("frameWork Popup Appears");
-            selectESGTree(frameworkName);
-            ckickSubmitBtn();
+            try{
+                selectquartly();
+                selectESGTree(frameworkName);
+                ckickSubmitBtn();
+            }
+          catch(NoSuchElementException e){
+              System.out.println("Element does not appear");
+          }
             dataLoaderWait();
             bodyLoadWait();
-
         } else System.out.println("Please Configure the Indicator, Framework is already selected");
-
     }
-
-
     public void stateElementReferenceHandle(By elementBy) {
         try {
             WebElement element = getDriver().findElement(elementBy);

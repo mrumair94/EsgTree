@@ -1,4 +1,5 @@
 import Tests.GPAccessManagerPage;
+import Tests.InvitePCFormPage;
 import Tests.Login;
 import Tests.TestBase;
 import org.openqa.selenium.By;
@@ -10,12 +11,19 @@ import java.util.List;
 public class TestPCOnboarding extends TestBase {
     private Login login;
     private GPAccessManagerPage gpAccessManagerPage;
+    private InvitePCFormPage invitePCFormPage;
 
     public Login getlogin(){
         if (this.login == null){
             this.login = new Login();
         }
         return this.login;
+    }
+    public InvitePCFormPage getinvitePCFormPage(){
+        if (this.invitePCFormPage == null){
+            this.invitePCFormPage = new InvitePCFormPage();
+        }
+        return this.invitePCFormPage;
     }
     public GPAccessManagerPage getgpDashboardPage(){
         if (this.gpAccessManagerPage == null){
@@ -59,5 +67,30 @@ public class TestPCOnboarding extends TestBase {
             passwordField.sendKeys("Admin123!");
         }else
             System.out.println("login Failed");
+    }
+      @Test(priority = 12)
+    public void TestinvitePCCompany() {
+        bodyLoadWait();
+        getinvitePCFormPage().clickAddPCBtn();
+    }
+    @Test (priority = 13)
+            public void typeCompanyName(){
+        getinvitePCFormPage().typeCompanyName();
+    }
+    @Test (priority = 14)
+    public void typeContactName(){
+        getinvitePCFormPage().typeContactName();
+    }
+    @Test (priority = 15)
+    public void emailIDBy(){
+        getinvitePCFormPage().emailIDBy();
+    }
+    @Test (priority = 16)
+    public void typePercentageAmount(){
+        getinvitePCFormPage().typePercentageAmount();
+    }
+    @Test (priority = 17)
+    public void selectBoardSeatNo(){
+        getinvitePCFormPage().selectBoardSeatNo();
     }
 }

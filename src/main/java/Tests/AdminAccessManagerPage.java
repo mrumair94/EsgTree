@@ -1,19 +1,16 @@
 package Tests;
 
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.datatransfer.*;
+import java.beans.Visibility;
 import java.io.IOException;
+import java.net.URL;
 import java.time.Duration;
 import java.util.List;
 
@@ -142,12 +139,13 @@ public class AdminAccessManagerPage extends TestBase {
             return false;
         }
     }*/
-   public String checkIfNoDataFound(){
-        String result = null;
+   public String checkIfNoDataFound() throws InterruptedException {
+        String result="";
         By noDataFoundBy = new By.ByXPath("//div[@class='table-responsive']/p[contains(text(),'No Data Found')]");
         List<WebElement> noDataFound = getDriver().findElements(noDataFoundBy);
         dataLoaderWait();
         if (noDataFound.size()>0) {
+            Thread.sleep(1000);
             String noDataFoundText = getDriver().findElement(noDataFoundBy).getText();
             // String status = getDriver().findElement()
             result = noDataFoundText;
@@ -187,36 +185,33 @@ public class AdminAccessManagerPage extends TestBase {
 
         return result;
     }
-    public void clickCopyLinkButton() throws InterruptedException, IOException, UnsupportedFlavorException {
+    public Boolean clickCopyLinkButton() throws InterruptedException, IOException, UnsupportedFlavorException {
         //Click on copy button
+        clearClipboard();
         bodyLoadWait();
         By copyBtnBy = new By.ByXPath("//td/a[@title='copy registration link']");
         elementToBeClickabledWait(copyBtnBy);
         WebElement copyBtn = getDriver().findElement(copyBtnBy);
-        try {
-            elementToBeClickabledWait(copyBtnBy);
-            this.js.executeScript("arguments[0].scrollIntoView(true);", copyBtn);
-            this.js.executeScript("arguments[0].click();", copyBtn);
-            Thread.sleep(1000);
-                clicOKOnSuccess();
-           /* WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-            wait.until(ExpectedConditions.alertIsPresent());*/
-            Thread.sleep(1000);
-            Alert simpleAlert = getDriver().switchTo().alert();
-            simpleAlert.accept();
-            System.out.println("Unexpected alert accepted");
-        } catch (Exception e) {
-            System.out.println(e.getLocalizedMessage());
-        }
+        //elementToBeClickabledWait(copyBtnBy);
+        /*this.js.executeScript("arguments[0].scrollIntoView(true);", copyBtn);
+        this.js.executeScript("arguments[0].click();", copyBtn);*/
+        Actions actions = new Actions(getDriver());
 
+        // Perform a sequence of actions (e.g., click on element1 and then on element2)
+        actions.click(copyBtn)
+                .click(copyBtn)
+                .build()
+                .perform();
+
+        Thread.sleep(3000);
+       Boolean popupCheck =  clicOKOnSuccessAdmin();
+        System.out.println("Clicked on the copy Button");
+
+        return popupCheck;
         }
    // Return GPContractInvitationPage?, Search Company Name, Copy Link, Logout
   //  @Test(priority = 6)
     public String openLink() throws InterruptedException, IOException, UnsupportedFlavorException {
-        //get link which is copied in the Clipboard
-        /*Thread.sleep(1500);
-        getlogin().logout();
-        bodyLoadWait();*/
 
         String copiedLink;
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -226,45 +221,152 @@ public class AdminAccessManagerPage extends TestBase {
         System.out.println(copiedLink);
         Thread.sleep(2000);
         //getlogin().logout();
-        Thread.sleep(2000);
+        //Thread.sleep(2000);
         getDriver().get(copiedLink);
         Thread.sleep(2000);
         bodyLoadWait();
         return getDriver().getTitle();
     }
-    public String openLinkTest() throws InterruptedException, IOException, UnsupportedFlavorException {
+
+String pastedUrl;
+    public String copyLink() throws InterruptedException, IOException, UnsupportedFlavorException {
+
+       //searchField(Keys.chord(Keys.CONTROL,"v"));
+        bodyLoadWait();
+        By searchFieldBy = new By.ByXPath("//section/div/div/div[1]/div/div[1]/div/div/form/div/input");
+
+        WebElement searchInput = getDriver().findElement(searchFieldBy);
+
+        // Paste a URL into the search bar
+        searchInput.sendKeys(Keys.CONTROL + "v");
+
+        // Retrieve the value from the search input and save it in a variable
+        String pastedUrl = searchInput.getAttribute("value");
+
+        // Output the pasted URL
+        System.out.println("Pasted URL: " + pastedUrl);
+
+        return pastedUrl;
+
+
+     /*   String copiedLink=null;
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         Transferable contents = clipboard.getContents(null);
 
-        String copiedLink = null;
-
-        // Check for plain text flavor
         if (contents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-            try {
-                copiedLink = (String) contents.getTransferData(DataFlavor.stringFlavor);
-                System.out.println("Link:"+ copiedLink);
-            } catch (UnsupportedFlavorException | IOException e) {
-                e.printStackTrace(); // Handle the exception as needed
-            }
+            copiedLink = (String) contents.getTransferData(DataFlavor.stringFlavor);
+        } else if (contents.isDataFlavorSupported(DataFlavor.getTextPlainUnicodeFlavor())) {
+            copiedLink = (String) contents.getTransferData(DataFlavor.getTextPlainUnicodeFlavor());
+        } else {
+            System.out.println("Unsupported clipboard content");
+           // return "Unsupported clipboard content";
         }
 
-        return copiedLink;
+        // Log the copied content to help diagnose the issue
+        System.out.println("Copied Content: '" + copiedLink + "'");
 
-
+        // Check if the copied content is a valid URL
+        if (isValidURL(copiedLink)) {
+            System.out.println("Copied Link: " + copiedLink);
+            Thread.sleep(2000);
+            // getlogin().logout();
+            // Thread.sleep(2000);
+            getDriver().get(copiedLink);
+            Thread.sleep(2000);
+            bodyLoadWait();
+           // return getDriver().getTitle();
+        } else {
+            System.out.println("Invalid URL: " + copiedLink);
+            // Handle the case where the copied link is not a valid URL
+           // return "Invalid URL";
+        }*/
     }
-    public void itemsPerPage100(){
-       /* WebElement dropdown = driver.findElement(By.className("form-control"));
-        dropdown.click();
 
-        // Select the "100" option
-        WebElement option100 = dropdown.findElement(By.cssSelector(".//option[@value='100']"));
-        option100.click();*/
+    // Function to check if a string is a valid URL
+    private boolean isValidURL(String url) {
+        try {
+            new URL(url).toURI();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    // Other methods in your class...
+    private void clearClipboard() {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        StringSelection emptySelection = new StringSelection("");
+        clipboard.setContents(emptySelection, null);
+    }
+    public Boolean clicOKOnSuccessAdmin() throws InterruptedException {
+        By okBtn = new By.ByXPath("//button[@type='button'][contains(text(),'OK')]");
+        if(copyBtnIsPresent()==true){
+
+        try {
+            By okBtn2 = new By.ByXPath("//button[@type='button'][contains(text(),'OK')]");
+            elementToBeClickabledWait(okBtn);
+            WebElement ok = getDriver().findElement(okBtn2);
+            // Your existing code to locate elements and perform actions
+
+            this.js.executeScript("arguments[0].scrollIntoView(true);", ok);
+            //  Thread.sleep(2000);
+            this.js.executeScript("arguments[0].click();", ok);
+
+        } catch (UnhandledAlertException alertEx) {
+            // Check if an alert is present before handling it
+            if (isAlertPresent()) {
+                Alert alert = getDriver().switchTo().alert();
+                // You can either accept the alert
+                alert.accept();
+                // Or dismiss the alert
+                // alert.dismiss();
+            }
+            By okBtn2 = new By.ByXPath("//button[@type='button'][contains(text(),'OK')]");
+
+            // After handling the alert, you can retry your previous action
+            WebElement okButton = getDriver().findElement(okBtn2);
+
+            this.js.executeScript("arguments[0].scrollIntoView(true);", okButton);
+            //  Thread.sleep(2000);
+            this.js.executeScript("arguments[0].click();", okButton);
+        }
+        return true;
+        }
+        else return false;
+    }
+
+
+    // Function to check if an alert is present
+    public static boolean isAlertPresent() {
+        try {
+            getDriver().switchTo().alert();
+            return true;
+        } catch (NoAlertPresentException e) {
+            return false;
+        }
+    }
+    public static boolean copyBtnIsPresent(){
+        try{
+            By copyBtnBy = new By.ByXPath("//td/a[@title='copy registration link']");
+            getDriver().findElement(copyBtnBy).isDisplayed();
+            return true;
+        }catch (TimeoutException e){
+            System.out.println("Exception: "+e);
+            return  false;
+        }catch (NoSuchElementException e){
+            System.out.println("Exception: "+e);
+            return false;
+        }
+    }
+
+    public void itemsPerPage100(){
+
         try {
             WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(30));
             wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("#child-data-datatable > tbody > tr > td > div > div")));
             // Find the select element by its <select> tag
             By intemsPerPagedropdownBy = new By.ByTagName("select");
-            WebElement intemsPerPagedropdown = driver.findElement(intemsPerPagedropdownBy);
+            WebElement intemsPerPagedropdown = getDriver().findElement(intemsPerPagedropdownBy);
 
             js.executeScript("arguments[0].scrollIntoView(true);", intemsPerPagedropdown);
             //  Thread.sleep(2000);
@@ -282,4 +384,6 @@ public class AdminAccessManagerPage extends TestBase {
         }
 
     }
+
 }
+
